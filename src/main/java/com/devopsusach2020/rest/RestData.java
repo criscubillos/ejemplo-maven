@@ -40,27 +40,28 @@ public class RestData {
 	    ResponseEntity<String> call= restTemplate.getForEntity("https://api.covid19api.com/live/country/" + message ,String.class);
 	    
 	    LOGGER.log(Level.INFO, "Consulta por pais");
-	    
+		
 		Pais response = new Pais();
 		int confirmed = 0;
 		int death = 0;
 		int recovered = 0;
 		Gson gson = new Gson();
-		Pais[] estados = null;
+		String body = call.getBody();
 		
-		if(call.getBody()!=null){
-			estados = gson.fromJson(call.getBody().toLowerCase(), Pais[].class);
+		if(body==null){
+			body = "";
 		}
+		
+		Pais[] estados = gson.fromJson(body.toLowerCase(), Pais[].class);
+		
 
-		if(estados!=null){
-			for(Pais estado : estados) {
-				response.setDate(estado.getDate());
-				response.setActive(estado.getActive());
-				confirmed += estado.getConfirmed();
-				death += estado.getDeaths();
-				recovered += estado.getRecovered();
-			}
-		}
+        for(Pais estado : estados) {
+        	response.setDate(estado.getDate());
+        	response.setActive(estado.getActive());
+        	confirmed += estado.getConfirmed();
+        	death += estado.getDeaths();
+        	recovered += estado.getRecovered();
+        }
         
     	response.setConfirmed(confirmed);
     	response.setDeaths(death);
@@ -78,18 +79,19 @@ public class RestData {
 		LOGGER.log(Level.INFO, "Consulta mundial");
 		
 		RestTemplate restTemplate = new RestTemplate();
-	    ResponseEntity<String> call= restTemplate.getForEntity("https://api.covid19api.com/world/total" ,String.class);
+		ResponseEntity<String> call= restTemplate.getForEntity("https://api.covid19api.com/world/total" ,String.class);
+		
 	    Mundial response = new Mundial();
 		Gson gson = new Gson();
-		Mundial estado = null;
-		
-		if(call.getBody()!=null){
-			estado = gson.fromJson(call.getBody().toLowerCase(), Mundial.class);
-			response.setTotalConfirmed(estado.getTotalConfirmed());
-			response.setTotalDeaths(estado.getTotalDeaths());
-			response.setTotalRecovered(estado.getTotalRecovered());
+		String body = call.getBody();
+		if(body==null){
+			body = "";
 		}
-		
+        Mundial estado = gson.fromJson(body.toLowerCase(), Mundial.class);
+        response.setTotalConfirmed(estado.getTotalConfirmed());
+        response.setTotalDeaths(estado.getTotalDeaths());
+        response.setTotalRecovered(estado.getTotalRecovered());
+
 		return response;		
 	}
 }
