@@ -32,9 +32,11 @@ pipeline {
         }
 
 	stage('Sonar'){
-		withSonarQubeEnv(installationName: 'SonarQube Docker') { 
-            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-        }
+        steps{
+            withSonarQubeEnv(installationName: 'SonarQube Docker') { 
+                sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+            }
+        }		
 	}
         
     }
