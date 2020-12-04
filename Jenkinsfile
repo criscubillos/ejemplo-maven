@@ -28,10 +28,14 @@ pipeline {
                 sh "mvn spring-boot:run &"
                 //sh 'sleep 10'
                 //sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing' "
-                
-                
             }
         }
+
+	stage('Sonar'){
+		withSonarQubeEnv(installationName: 'SonarQube Docker') { 
+            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+        }
+	}
         
     }
 }
