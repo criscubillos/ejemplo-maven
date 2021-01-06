@@ -26,8 +26,8 @@ pipeline {
         stage('Ejecutar'){
             steps {
                 sh "mvn spring-boot:run &"
-                sh 'sleep 10'
-                sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing' "
+                sh 'sleep 3'
+                //sh "curl -X GET 'http://localhost:8081/rest/mscovid/test?msg=testing' "
                 
                 
             }
